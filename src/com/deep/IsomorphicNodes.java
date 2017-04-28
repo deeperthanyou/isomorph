@@ -59,21 +59,21 @@ class IsomorphicNodes {
         Node tree3 = initThirdTree();
 
         SimpleDateFormat f = new SimpleDateFormat("S");
-        System.out.println("1) Printing tree1 \n");
+        System.out.println("1) Printing tree1");
         long start = System.nanoTime();
         Printer.printTree(tree1);
         long end = System.nanoTime();
         System.out.printf("Took %s ns to print", end - start);
         System.out.println("\n");
 
-        System.out.println("2) Printing tree2 \n");
+        System.out.println("2) Printing tree2");
         start = System.nanoTime();
         Printer.printTree(tree2);
         end = System.nanoTime();
         System.out.printf("Took %s ns to print", end - start);
         System.out.println("\n");
 
-        System.out.println("3) Printing tree3 \n");
+        System.out.println("3) Printing tree3");
         start = System.nanoTime();
         Printer.printTree(tree3);
         end = System.nanoTime();
@@ -135,7 +135,7 @@ class IsomorphicNodes {
 }
 
 /**
- * Class that prints the Binary Trees
+ * Class that prints the Binary Trees recursively
  */
 class Printer {
 
@@ -144,83 +144,118 @@ class Printer {
      *
      * @param tree the tree to print out
      */
-    public static <T extends Comparable<?>> void printTree(Node tree) {
-        int maxLevel = Printer.maxLevel(tree);
+    public static void printTree(Node tree) {
+        int maxLevel = getNumOfLevels(tree);
         printNodeInternal(Collections.singletonList(tree), 1, maxLevel);
     }
 
     /**
-     * prints all the nodes as a tree
+     * prints the nodes as a tree
      *
-     * @param nodes    the list of nodes to print
-     * @param level    the level that you want to print
-     * @param maxLevel the maximum level that you're on
+     * @param nodes        the list of nodes to print
+     * @param currentLevel the level that you want to print
+     * @param numOfLevels  the maximum level that you're on
      */
-    private static <T extends Comparable<?>> void printNodeInternal(List<Node> nodes, int level, int maxLevel) {
-        if (nodes.isEmpty() || Printer.areAllElementsNull(nodes)) return;
+    private static void printNodeInternal(List<Node> nodes, int currentLevel, int numOfLevels) {
+        //don't do anything if there are not nodes or if all the list items are null
+        if (nodes.isEmpty() || areAllElementsNull(nodes)) return;
 
-        int floor = maxLevel - level;
-        int endgeLines = (int) Math.pow(2, (Math.max(floor - 1, 0)));
-        int firstSpaces = (int) Math.pow(2, (floor)) - 1;
-        int betweenSpaces = (int) Math.pow(2, (floor + 1)) - 1;
+        int distanceFromFloor = numOfLevels - currentLevel; //the distance from the floor of the tree
+        int edgeLineNum = (int) Math.pow(2, Math.max(distanceFromFloor - 1, 0)); //number of lines to put separating each node
+        int startSpaces = (int) Math.pow(2, distanceFromFloor) - 1; //number of spaces to add before the data node
+        int spacesBetween = (int) Math.pow(2, distanceFromFloor + 1) - 1; //number of spaces between each node
 
-        Printer.printWhitespaces(firstSpaces);
+        //prints spaces before the value for a node at a given point
+        printWhitespaces(startSpaces);
 
-        List<Node> newNodes = new ArrayList<Node>();
-        for (Node node : nodes) {
+        //holds the list of nodes that are supposed to be expanded for the next level
+        List<Node> newNodes = new ArrayList<>();
+
+        //prints out the data from the list of nodes
+        for (int i = 0; i < nodes.size(); i++) {
+            Node node = nodes.get(i);
             if (node != null) {
                 System.out.print(node.data);
                 newNodes.add(node.left);
                 newNodes.add(node.right);
             } else {
-                newNodes.add(null);
-                newNodes.add(null);
                 System.out.print(" ");
+                newNodes.add(null);
+                newNodes.add(null);
             }
 
-            Printer.printWhitespaces(betweenSpaces);
+            //if the node is the last node then just print the number of spaces to fill in the image, not overflow
+            boolean isLastNode = i != (nodes.size() - 1);
+            if (isLastNode) {
+                printWhitespaces(spacesBetween);
+            } else {
+                printWhitespaces(startSpaces + 1);
+            }
         }
-        System.out.println("");
 
-        for (int i = 1; i <= endgeLines; i++) {
-            for (int j = 0; j < nodes.size(); j++) {
-                Printer.printWhitespaces(firstSpaces - i);
-                if (nodes.get(j) == null) {
-                    Printer.printWhitespaces(endgeLines + endgeLines + i + 1);
+        //prints debug info to the console
+        //System.out.printf("\t(currentLevel:%s, numOfLevels:%s, distanceFromFloor:%s, edgeLineNum:%s, startSpaces:%s, spacesBetween:%s)", currentLevel, numOfLevels, distanceFromFloor, edgeLineNum, startSpaces, spacesBetween);
+
+        if (areAllElementsNull(newNodes)) {
+            System.out.println();
+            //System.out.print(" - END\n");
+            return;
+        }
+
+        System.out.println();
+
+        //prints the edge lines if they need to be printed
+        for (int i = 1; i <= edgeLineNum; i++) {
+            for (Node node : nodes) {
+                printWhitespaces(startSpaces - i);
+                if (node == null) {
+                    printWhitespaces(edgeLineNum * 2 + i + 1);
                     continue;
                 }
 
-                if (nodes.get(j).left != null) System.out.print("/");
-                else Printer.printWhitespaces(1);
+                //print the left node edge line
+                //or a white space because the node's data will probably be there
+                if (node.left != null) {
+                    System.out.print("/");
+                } else {
+                    printWhitespaces(1);
+                }
 
-                Printer.printWhitespaces(i + i - 1);
+                //print the spaces between edge lines
+                printWhitespaces(i * 2 - 1);
 
-                if (nodes.get(j).right != null) System.out.print("\\");
-                else Printer.printWhitespaces(1);
+                //print the right node edge line
+                //or a white space because the node's data will probably be there
+                if (node.right != null) {
+                    System.out.print("\\");
+                } else {
+                    printWhitespaces(1);
+                }
 
-                Printer.printWhitespaces(endgeLines + endgeLines - i);
+                //print the spaces after edge lines
+                printWhitespaces(edgeLineNum * 2 - i);
             }
 
-            System.out.println("");
+            System.out.println();
         }
 
-        Printer.printNodeInternal(newNodes, level + 1, maxLevel);
+        printNodeInternal(newNodes, currentLevel + 1, numOfLevels);
     }
 
     private static void printWhitespaces(int count) {
-        for (int i = 0; i < count; i++) System.out.print(" ");
+        for (int i = 0; i < count; i++)
+            System.out.print(" ");
     }
 
     /**
-     * gets the max level for the tree
+     * gets the number of levels for the tree
      *
-     * @param tree gets the max level of the node
+     * @param node gets the max level of the node
      * @return the max level of the node
      */
-    private static <T extends Comparable<?>> int maxLevel(Node tree) {
-        if (tree == null) return 0;
-
-        return Math.max(Printer.maxLevel(tree.left), Printer.maxLevel(tree.right)) + 1;
+    private static int getNumOfLevels(Node node) {
+        if (node == null) return 0;
+        return Math.max(getNumOfLevels(node.left), getNumOfLevels(node.right)) + 1;
     }
 
     /**
@@ -228,11 +263,10 @@ class Printer {
      *
      * @param list list to check
      */
-    private static <T> boolean areAllElementsNull(List<T> list) {
-        for (Object object : list) {
-            if (object != null) return false;
+    private static boolean areAllElementsNull(List<Node> list) {
+        for (Node node : list) {
+            if (node != null) return false;
         }
-
         return true;
     }
 
