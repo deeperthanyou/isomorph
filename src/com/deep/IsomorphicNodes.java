@@ -1,6 +1,5 @@
 package com.deep;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +42,7 @@ class Isomorphic {
      * @param first  the first node to compare
      * @param second the second node to compare
      */
-    boolean recursive(Node first, Node second) {
+    static boolean recursive(Node first, Node second) {
         // Both roots are NULL, trees isomorphic by definition
         if (first == null && second == null) return true;
 
@@ -57,11 +56,11 @@ class Isomorphic {
         // Case 1: The subtrees rooted at these nodes have NOT been "Flipped".
         // Both of these subtrees have to be isomorphic.
         // Case 2: The subtrees rooted at these nodes have been "Flipped"
-        return (this.recursive(first.left, second.left) && this.recursive(first.right, second.right)) ||
-                (this.recursive(first.left, second.right) && this.recursive(first.right, second.left));
+        return (recursive(first.left, second.left) && recursive(first.right, second.right)) ||
+                (recursive(first.left, second.right) && recursive(first.right, second.left));
     }
 
-    boolean iterative(final Node tree1, final Node tree2) {
+    static boolean iterative(final Node tree1, final Node tree2) {
         Stack<Node> stack1 = new Stack<>(); //nodes from tree1
         Stack<Node> stack2 = new Stack<>(); //nodes from tree2
         stack1.push(tree1);
@@ -79,7 +78,7 @@ class Isomorphic {
             if ((first == null) || (second == null)) return false;
 
             //if they're not equal they're not isomorphic
-            if (!nodesEqual(first, second)) return false;
+            if (!(first.data == second.data)) return false;
 
 
             // There are two possible cases for first and second to be isomorphic
@@ -113,71 +112,73 @@ class Isomorphic {
     }
 }
 
+/**
+ * Driver class
+ */
 class IsomorphicNodes {
 
     public static void main(String args[]) {
-        // creates a class for the algorithm to be applied
-        Isomorphic algorithm = new Isomorphic();
-
         // generate sample trees
         Node tree1 = initFirstTree();
         Node tree2 = initSecondTree();
         Node tree3 = initThirdTree();
+        Node tree4 = initFourthTree();
 
-        SimpleDateFormat f = new SimpleDateFormat("S");
-        System.out.println("1) Printing tree1");
-        long start = System.nanoTime();
-        Printer.printTree(tree1);
-        long end = System.nanoTime();
-        System.out.printf("Took %s ns to print", end - start);
-        System.out.println("\n");
-
-        System.out.println("2) Printing tree2");
-        start = System.nanoTime();
-        Printer.printTree(tree2);
-        end = System.nanoTime();
-        System.out.printf("Took %s ns to print", end - start);
-        System.out.println("\n");
-
-        System.out.println("3) Printing tree3");
-        start = System.nanoTime();
-        Printer.printTree(tree3);
-        end = System.nanoTime();
-        System.out.printf("Took %s ns to print", end - start);
+        printTree("1) Printing tree1", tree1);
+        printTree("2) Printing tree2", tree2);
+        printTree("3) Printing tree3", tree3);
+        printTree("4) Printing tree4", tree4);
         System.out.println("\n");
 
         System.out.println("========================== Isomorphic Test ==========================\n");
-        System.out.printf("1) Checking if tree1 and tree2 are Isomorphic... \n\t");
-        start = System.nanoTime();
-        boolean isIsomorphic = algorithm.recursive(tree1, tree2);
-        end = System.nanoTime();
-        System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check recursively\n\t", end - start);
-        start = System.nanoTime();
-        isIsomorphic = algorithm.iterative(tree1, tree2);
-        end = System.nanoTime();
-        System.out.printf("b) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check iteratively", end - start);
-        System.out.println("\n");
+        runAlgorithmForNodes("1) Checking if tree1 and tree2 are Isomorphic... \n\t", tree1, tree2);
+        runAlgorithmForNodes("2) Checking if tree1 and tree3 are Isomorphic... \n\t", tree1, tree3);
+        runAlgorithmForNodes("3) Checking if tree2 and tree3 are Isomorphic... \n\t", tree2, tree3);
+        runAlgorithmForNodes("4) Checking if tree3 and tree4 are Isomorphic... \n\t", tree1, tree4);
+    }
 
-        System.out.printf("2) Checking if tree1 and tree3 are Isomorphic... \n\t");
-        start = System.nanoTime();
-        isIsomorphic = algorithm.recursive(tree1, tree3);
-        end = System.nanoTime();
-        System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check recursively\n\t", end - start);
-        start = System.nanoTime();
-        isIsomorphic = algorithm.iterative(tree1, tree3);
-        end = System.nanoTime();
-        System.out.printf("b) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check iteratively", end - start);
+    /**
+     * helper method to print the trees and the time taken to print the trees
+     */
+    private static void printTree(String title, Node tree) {
+        System.out.println(title);
+        long start = System.nanoTime();
+        Printer.printTree(tree);
+        long end = System.nanoTime();
+        System.out.printf("Took %s ns to print", end - start);
         System.out.println("\n");
+    }
 
-        System.out.printf("3) Checking if tree2 and tree3 are Isomorphic... \n\t");
+    /**
+     * runs the algorithm and prints out the time taken to run the algorithm both recursively iteratively
+     */
+    private static void runAlgorithmForNodes(String titleOfTest, Node tree1, Node tree2) {
+        //display the title
+        System.out.printf(titleOfTest);
+
+        //run the first algorithm
+        long start = System.nanoTime();
+        boolean isIsomorphic = Isomorphic.recursive(tree1, tree2);
+        long end = System.nanoTime();
+        System.out.printf("recursive method - " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns\n\t", end - start);
+
+        //run the iterative implementation
         start = System.nanoTime();
-        isIsomorphic = algorithm.recursive(tree2, tree3);
+        isIsomorphic = Isomorphic.iterative(tree1, tree2);
         end = System.nanoTime();
-        System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check recursively\n\t", end - start);
-        start = System.nanoTime();
-        isIsomorphic = algorithm.iterative(tree2, tree3);
-        end = System.nanoTime();
-        System.out.printf("b) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check iteratively", end - start);
+        System.out.printf("iterative method - " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns\n\n", end - start);
+    }
+
+    private static Node initFourthTree() {
+        Node node = new Node(1);
+        node.left = new Node(2);
+        node.right = new Node(3);
+        node.left.left = new Node(4);
+        node.left.right = new Node(5);
+        node.right.left = new Node(6);
+        node.left.right.left = new Node(8);
+        node.left.right.right = new Node(7);
+        return node;
     }
 
     //creates the first tree
@@ -302,7 +303,7 @@ class Printer {
         //if there are no more non null nodes in the list of nodes to check then you're done
         if (areAllElementsNull(newNodes)) {
             //System.out.print("END");
-            System.out.println();
+            //System.out.println();
             return;
         }
 
