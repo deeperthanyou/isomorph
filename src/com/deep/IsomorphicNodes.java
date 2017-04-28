@@ -45,7 +45,7 @@ class Algorithm {
 
 }
 
-class Main {
+class IsomorphicNodes {
 
     public static void main(String args[]) {
         // creates a class for the algorithm to be applied
