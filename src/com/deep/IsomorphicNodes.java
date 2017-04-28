@@ -1,6 +1,8 @@
 package com.deep;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -57,41 +59,40 @@ class IsomorphicNodes {
         Node tree3 = initThirdTree();
 
         SimpleDateFormat f = new SimpleDateFormat("S");
-
         System.out.println("1) Printing tree1 \n");
-        long start = System.currentTimeMillis();
+        long start = System.nanoTime();
         Printer.printTree(tree1);
-        long end = System.currentTimeMillis();
-        System.out.printf("Took %s ms to print", f.format(new Date(end - start)));
+        long end = System.nanoTime();
+        System.out.printf("Took %s ns to print", end - start);
         System.out.println("\n");
 
         System.out.println("2) Printing tree2 \n");
-        start = System.currentTimeMillis();
+        start = System.nanoTime();
         Printer.printTree(tree2);
-        end = System.currentTimeMillis();
-        System.out.printf("Took %s ms to print", f.format(new Date(end - start)));
+        end = System.nanoTime();
+        System.out.printf("Took %s ns to print", end - start);
         System.out.println("\n");
 
         System.out.println("3) Printing tree3 \n");
-        start = System.currentTimeMillis();
+        start = System.nanoTime();
         Printer.printTree(tree3);
-        end = System.currentTimeMillis();
-        System.out.printf("Took %s ms to print", f.format(new Date(end - start)));
+        end = System.nanoTime();
+        System.out.printf("Took %s ns to print", end - start);
         System.out.println("\n");
 
         System.out.println("========================== Isomorphic Test ==========================\n");
         System.out.printf("1) Checking if tree1 and tree2 are Isomorphic... \n\t");
-        start = System.currentTimeMillis();
+        start = System.nanoTime();
         boolean isIsomorphic = algorithm.isIsomorphic(tree1, tree2);
-        end = System.currentTimeMillis();
-        System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ms to check", f.format(new Date(end - start)));
+        end = System.nanoTime();
+        System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check", end - start);
         System.out.println("\n");
 
         System.out.printf("2) Checking if tree1 and tree3 are Isomorphic... \n\t");
-        start = System.currentTimeMillis();
+        start = System.nanoTime();
         isIsomorphic = algorithm.isIsomorphic(tree1, tree3);
-        end = System.currentTimeMillis();
-        System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ms to check", f.format(new Date(end - start)));
+        end = System.nanoTime();
+        System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check", end - start);
         System.out.println("\n");
     }
 
