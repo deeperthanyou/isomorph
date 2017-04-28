@@ -16,34 +16,6 @@ class Node {
         data = item;
         left = right = null;
     }
-
-    public int getData() {
-        return data;
-    }
-
-    public Node getLeft() {
-        return left;
-    }
-
-    public void setLeft(Node left) {
-        this.left = left;
-    }
-
-    public Node getRight() {
-        return right;
-    }
-
-    public void setRight(Node right) {
-        this.right = right;
-    }
-
-    public boolean hasLeft() {
-        return this.getLeft() != null;
-    }
-
-    public boolean hasRight() {
-        return this.getRight() != null;
-    }
 }
 
 class Algorithm {
@@ -86,34 +58,34 @@ class Main {
 
         SimpleDateFormat f = new SimpleDateFormat("S");
 
-        System.out.println("Printing first node");
+        System.out.println("1) Printing tree1 ==================================================== \n");
         long start = System.currentTimeMillis();
         Printer.printTree(tree1);
         long end = System.currentTimeMillis();
         System.out.printf("Took %s ms to print", f.format(new Date(end - start)));
-        System.out.println("\n-------------------------------------------------------------------------------------");
+        System.out.println("\n");
 
-        System.out.println("Printing second node");
+        System.out.println("2) Printing tree2 ==================================================== \n");
         start = System.currentTimeMillis();
         Printer.printTree(tree2);
         end = System.currentTimeMillis();
         System.out.printf("Took %s ms to print", f.format(new Date(end - start)));
-        System.out.println("\n-------------------------------------------------------------------------------------");
+        System.out.println("\n");
 
-        System.out.println("Printing third node");
+        System.out.println("3) Printing tree3 ==================================================== \n");
         start = System.currentTimeMillis();
         Printer.printTree(tree3);
         end = System.currentTimeMillis();
         System.out.printf("Took %s ms to print", f.format(new Date(end - start)));
-        //System.out.println("\n-------------------------------------------------------------------------------------");
+        System.out.println("\n\n");
 
-        System.out.println("\n\n================================== Isomorphic Test ==================================");
+        System.out.println("========================== Isomorphic Test ==========================\n");
         System.out.printf("1) Checking if tree1 and tree2 are Isomorphic... \n\t");
         start = System.currentTimeMillis();
         boolean isIsomorphic = algorithm.isIsomorphic(tree1, tree2);
         end = System.currentTimeMillis();
         System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ms to check", f.format(new Date(end - start)));
-        System.out.println("\n\n");
+        System.out.println("\n");
 
         System.out.printf("2) Checking if tree1 and tree3 are Isomorphic... \n\t");
         start = System.currentTimeMillis();
