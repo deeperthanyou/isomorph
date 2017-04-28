@@ -96,6 +96,7 @@ class IsomorphicNodes {
         System.out.println("\n");
     }
 
+    //creates the first tree
     static Node initFirstTree() {
         Node node = new Node(1);
         node.left = new Node(2);
@@ -108,6 +109,7 @@ class IsomorphicNodes {
         return node;
     }
 
+    //creates the second tree
     static Node initSecondTree() {
         Node node = new Node(1);
         node.left = new Node(3);
@@ -120,6 +122,7 @@ class IsomorphicNodes {
         return node;
     }
 
+    //creates the third tree
     static Node initThirdTree() {
         Node node = new Node(1);
         node.left = new Node(2);
@@ -141,6 +144,20 @@ class Printer {
 
     /**
      * prints the node as a tree
+     *
+     * ex) Something like the below diagram
+     *
+     *        1
+     *       / \
+     *      /   \
+     *     /     \
+     *    /       \
+     *    2       3
+     *     \     / \
+     *      \   /   \
+     *      4   6   5
+     *             / \
+     *             8 7
      *
      * @param tree the tree to print out
      */
@@ -165,8 +182,9 @@ class Printer {
         int startSpaces = (int) Math.pow(2, distanceFromFloor) - 1; //number of spaces to add before the data node
         int spacesBetween = (int) Math.pow(2, distanceFromFloor + 1) - 1; //number of spaces between each node
 
-        //prints spaces before the value for a node at a given point
-        printWhitespaces(startSpaces);
+        //prints spaces before printing the data value for a node at the given point
+        int offsetToRight = 1;
+        printWhitespaces(startSpaces + offsetToRight);
 
         //holds the list of nodes that are supposed to be expanded for the next level
         List<Node> newNodes = new ArrayList<>();
@@ -175,7 +193,7 @@ class Printer {
         for (int i = 0; i < nodes.size(); i++) {
             Node node = nodes.get(i);
             if (node != null) {
-                System.out.print(node.data);
+                System.out.printf("%s", node.data);
                 newNodes.add(node.left);
                 newNodes.add(node.right);
             } else {
@@ -193,23 +211,27 @@ class Printer {
             }
         }
 
-        //prints debug info to the console
-        //System.out.printf("\t(currentLevel:%s, numOfLevels:%s, distanceFromFloor:%s, edgeLineNum:%s, startSpaces:%s, spacesBetween:%s)", currentLevel, numOfLevels, distanceFromFloor, edgeLineNum, startSpaces, spacesBetween);
+        //prints debug info
+        //System.out.printf("\t\t(currentLevel:%s, numOfLevels:%s, distanceFromFloor:%s, edgeLineNum:%s, startSpaces:%s, spacesBetween:%s)", currentLevel, numOfLevels, distanceFromFloor, edgeLineNum, startSpaces, spacesBetween);
+        System.out.println();
 
+        //if there are no more non null nodes in the list of nodes to check then you're done
         if (areAllElementsNull(newNodes)) {
+            //System.out.print("END");
             System.out.println();
-            //System.out.print(" - END\n");
             return;
         }
 
-        System.out.println();
-
-        //prints the edge lines if they need to be printed
+        // Loops through and prints the edge lines
+        // if they need to be printed otherwise just print the spaces
         for (int i = 1; i <= edgeLineNum; i++) {
+            printWhitespaces(offsetToRight);
             for (Node node : nodes) {
                 printWhitespaces(startSpaces - i);
+                //System.out.printf("(%s)", startSpaces - i);
                 if (node == null) {
                     printWhitespaces(edgeLineNum * 2 + i + 1);
+                    //System.out.printf("(%s)", edgeLineNum * 2 + i + 1);
                     continue;
                 }
 
@@ -225,7 +247,7 @@ class Printer {
                 printWhitespaces(i * 2 - 1);
 
                 //print the right node edge line
-                //or a white space because the node's data will probably be there
+                //or a white space because the node doesn't have a child there
                 if (node.right != null) {
                     System.out.print("\\");
                 } else {
