@@ -58,26 +58,26 @@ class Main {
 
         SimpleDateFormat f = new SimpleDateFormat("S");
 
-        System.out.println("1) Printing tree1 ==================================================== \n");
+        System.out.println("1) Printing tree1 \n");
         long start = System.currentTimeMillis();
         Printer.printTree(tree1);
         long end = System.currentTimeMillis();
         System.out.printf("Took %s ms to print", f.format(new Date(end - start)));
         System.out.println("\n");
 
-        System.out.println("2) Printing tree2 ==================================================== \n");
+        System.out.println("2) Printing tree2 \n");
         start = System.currentTimeMillis();
         Printer.printTree(tree2);
         end = System.currentTimeMillis();
         System.out.printf("Took %s ms to print", f.format(new Date(end - start)));
         System.out.println("\n");
 
-        System.out.println("3) Printing tree3 ==================================================== \n");
+        System.out.println("3) Printing tree3 \n");
         start = System.currentTimeMillis();
         Printer.printTree(tree3);
         end = System.currentTimeMillis();
         System.out.printf("Took %s ms to print", f.format(new Date(end - start)));
-        System.out.println("\n\n");
+        System.out.println("\n");
 
         System.out.println("========================== Isomorphic Test ==========================\n");
         System.out.printf("1) Checking if tree1 and tree2 are Isomorphic... \n\t");
@@ -92,7 +92,7 @@ class Main {
         isIsomorphic = algorithm.isIsomorphic(tree1, tree3);
         end = System.currentTimeMillis();
         System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ms to check", f.format(new Date(end - start)));
-        System.out.println("\n\n");
+        System.out.println("\n");
     }
 
     static Node initFirstTree() {
