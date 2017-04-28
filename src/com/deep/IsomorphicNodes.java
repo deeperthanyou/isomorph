@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by deep on 4/27/17.
@@ -15,19 +16,34 @@ class Node {
     Node left, right;
 
     Node(int item) {
-        data = item;
-        left = right = null;
+        this.data = item;
+        this.left = this.right = null;
     }
 }
 
-class Algorithm {
+class Isomorphic {
+    private static boolean nodesEqual(Node first, Node second) {
+        // if Both trees are NULL, trees isomorphic by definition
+        if ((first == null) && (second == null)) {
+            return true;
+        } else {
+            // Exactly one of the first and second is NULL, trees not equal nor are they isomorphic
+            if ((first == null) || (second == null)) {
+                return false;
+            } else {
+                //if the two are equal trees might be isomorphic
+                return first.data == second.data;
+            }
+        }
+    }
+
     /**
      * recursively checks if the 2 nodes are isomorphic
      *
      * @param first  the first node to compare
      * @param second the second node to compare
      */
-    boolean isIsomorphic(Node first, Node second) {
+    boolean recursive(Node first, Node second) {
         // Both roots are NULL, trees isomorphic by definition
         if (first == null && second == null) return true;
 
@@ -41,17 +57,67 @@ class Algorithm {
         // Case 1: The subtrees rooted at these nodes have NOT been "Flipped".
         // Both of these subtrees have to be isomorphic.
         // Case 2: The subtrees rooted at these nodes have been "Flipped"
-        return (this.isIsomorphic(first.left, second.left) && this.isIsomorphic(first.right, second.right)) ||
-                (this.isIsomorphic(first.left, second.right) && this.isIsomorphic(first.right, second.left));
+        return (this.recursive(first.left, second.left) && this.recursive(first.right, second.right)) ||
+                (this.recursive(first.left, second.right) && this.recursive(first.right, second.left));
     }
 
+    boolean iterative(final Node tree1, final Node tree2) {
+        Stack<Node> stack1 = new Stack<>(); //nodes from tree1
+        Stack<Node> stack2 = new Stack<>(); //nodes from tree2
+        stack1.push(tree1);
+        stack2.push(tree2);
+
+        Node first, second;
+        while (!stack1.isEmpty() && !stack2.isEmpty()) {
+            first = stack1.pop();
+            second = stack2.pop();
+
+            //might be isomorphic continue...
+            if ((first == null) && (second == null)) continue;
+
+            //not isomorphic if comparing null nodes
+            if ((first == null) || (second == null)) return false;
+
+            //if they're not equal they're not isomorphic
+            if (!nodesEqual(first, second)) return false;
+
+
+            // There are two possible cases for first and second to be isomorphic
+            // Case 1: The subtrees rooted at these nodes are "Symmetric".
+            if (nodesEqual(first.left, second.left) &&
+                    nodesEqual(first.right, second.right)) {
+                //add the child nodes to the stacks in symmetric order so they'll be pulled symmetrically
+                stack1.push(first.left);
+                stack2.push(second.left);
+                stack1.push(first.right);
+                stack2.push(second.right);
+                continue;
+            }
+
+            // Both of these subtrees have to be isomorphic.
+            // Case 2: The subtrees rooted at these nodes have been "Flipped"
+            if (nodesEqual(first.left, second.right) &&
+                    nodesEqual(first.right, second.left)) {
+                //add the child nodes to the stacked in flipped order so they'll be pulled flipped and the nodes match up
+                stack1.push(first.left);
+                stack2.push(second.right);
+                stack1.push(first.right);
+                stack2.push(second.left);
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
 }
 
 class IsomorphicNodes {
 
     public static void main(String args[]) {
         // creates a class for the algorithm to be applied
-        Algorithm algorithm = new Algorithm();
+        Isomorphic algorithm = new Isomorphic();
 
         // generate sample trees
         Node tree1 = initFirstTree();
@@ -83,17 +149,35 @@ class IsomorphicNodes {
         System.out.println("========================== Isomorphic Test ==========================\n");
         System.out.printf("1) Checking if tree1 and tree2 are Isomorphic... \n\t");
         start = System.nanoTime();
-        boolean isIsomorphic = algorithm.isIsomorphic(tree1, tree2);
+        boolean isIsomorphic = algorithm.recursive(tree1, tree2);
         end = System.nanoTime();
-        System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check", end - start);
+        System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check recursively\n\t", end - start);
+        start = System.nanoTime();
+        isIsomorphic = algorithm.iterative(tree1, tree2);
+        end = System.nanoTime();
+        System.out.printf("b) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check iteratively", end - start);
         System.out.println("\n");
 
         System.out.printf("2) Checking if tree1 and tree3 are Isomorphic... \n\t");
         start = System.nanoTime();
-        isIsomorphic = algorithm.isIsomorphic(tree1, tree3);
+        isIsomorphic = algorithm.recursive(tree1, tree3);
         end = System.nanoTime();
-        System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check", end - start);
+        System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check recursively\n\t", end - start);
+        start = System.nanoTime();
+        isIsomorphic = algorithm.iterative(tree1, tree3);
+        end = System.nanoTime();
+        System.out.printf("b) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check iteratively", end - start);
         System.out.println("\n");
+
+        System.out.printf("3) Checking if tree2 and tree3 are Isomorphic... \n\t");
+        start = System.nanoTime();
+        isIsomorphic = algorithm.recursive(tree2, tree3);
+        end = System.nanoTime();
+        System.out.printf("a) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check recursively\n\t", end - start);
+        start = System.nanoTime();
+        isIsomorphic = algorithm.iterative(tree2, tree3);
+        end = System.nanoTime();
+        System.out.printf("b) " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns to check iteratively", end - start);
     }
 
     //creates the first tree
@@ -144,20 +228,20 @@ class Printer {
 
     /**
      * prints the node as a tree
-     *
+     * <p>
      * ex) Something like the below diagram
-     *
-     *        1
-     *       / \
-     *      /   \
-     *     /     \
-     *    /       \
-     *    2       3
-     *     \     / \
-     *      \   /   \
-     *      4   6   5
-     *             / \
-     *             8 7
+     * <p>
+     * 1
+     * / \
+     * /   \
+     * /     \
+     * /       \
+     * 2       3
+     * \     / \
+     * \   /   \
+     * 4   6   5
+     * / \
+     * 8 7
      *
      * @param tree the tree to print out
      */
