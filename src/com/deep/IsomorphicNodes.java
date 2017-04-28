@@ -10,6 +10,9 @@ import java.util.Stack;
  * implements an algorithm to check if two nodes are isomorphic
  */
 
+/**
+ * class for the node
+ */
 class Node {
     final int data;
     Node left, right;
@@ -20,6 +23,9 @@ class Node {
     }
 }
 
+/**
+ * implementation of the algorithm in recursive and iterative methods
+ */
 class Isomorphic {
     private static boolean nodesEqual(Node first, Node second) {
         // if Both trees are NULL, trees isomorphic by definition
@@ -39,8 +45,8 @@ class Isomorphic {
     /**
      * recursively checks if the 2 nodes are isomorphic
      *
-     * @param first  the first node to compare
-     * @param second the second node to compare
+     * @param first  the first node/tree to compare
+     * @param second the second node/tree to compare
      */
     static boolean recursive(Node first, Node second) {
         // Both roots are NULL, trees isomorphic by definition
@@ -60,7 +66,10 @@ class Isomorphic {
                 (recursive(first.left, second.right) && recursive(first.right, second.left));
     }
 
-    static boolean iterative(final Node tree1, final Node tree2) {
+    /**
+     * iteratively checks if the two nodes are isomorphic
+     */
+    static boolean iterative(Node tree1, Node tree2) {
         Stack<Node> stack1 = new Stack<>(); //nodes from tree1
         Stack<Node> stack2 = new Stack<>(); //nodes from tree2
         stack1.push(tree1);
@@ -134,7 +143,7 @@ class IsomorphicNodes {
         runAlgorithmForNodes("1) Checking if tree1 and tree2 are Isomorphic... \n\t", tree1, tree2);
         runAlgorithmForNodes("2) Checking if tree1 and tree3 are Isomorphic... \n\t", tree1, tree3);
         runAlgorithmForNodes("3) Checking if tree2 and tree3 are Isomorphic... \n\t", tree2, tree3);
-        runAlgorithmForNodes("4) Checking if tree3 and tree4 are Isomorphic... \n\t", tree1, tree4);
+        runAlgorithmForNodes("4) Checking if tree4 and tree1 are Isomorphic... \n\t", tree4, tree1);
     }
 
     /**
@@ -145,7 +154,7 @@ class IsomorphicNodes {
         long start = System.nanoTime();
         Printer.printTree(tree);
         long end = System.nanoTime();
-        System.out.printf("Took %s ns to print", end - start);
+        System.out.printf("\tTook %s ns to print", end - start);
         System.out.println("\n");
     }
 
@@ -167,18 +176,6 @@ class IsomorphicNodes {
         isIsomorphic = Isomorphic.iterative(tree1, tree2);
         end = System.nanoTime();
         System.out.printf("iterative method - " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns\n\n", end - start);
-    }
-
-    private static Node initFourthTree() {
-        Node node = new Node(1);
-        node.left = new Node(2);
-        node.right = new Node(3);
-        node.left.left = new Node(4);
-        node.left.right = new Node(5);
-        node.right.left = new Node(6);
-        node.left.right.left = new Node(8);
-        node.left.right.right = new Node(7);
-        return node;
     }
 
     //creates the first tree
@@ -220,6 +217,18 @@ class IsomorphicNodes {
         return node;
     }
 
+    static Node initFourthTree() {
+        Node node = new Node(1);
+        node.left = new Node(2);
+        node.right = new Node(3);
+        node.left.left = new Node(4);
+        node.left.right = new Node(5);
+        node.right.left = new Node(6);
+        node.left.right.left = new Node(8);
+        node.left.right.right = new Node(7);
+        return node;
+    }
+
 }
 
 /**
@@ -230,19 +239,19 @@ class Printer {
     /**
      * prints the node as a tree
      * <p>
-     * ex) Something like the below diagram
+     * ex) Something like the below diagram but without the dashes
      * <p>
-     * 1
-     * / \
-     * /   \
-     * /     \
-     * /       \
-     * 2       3
-     * \     / \
-     * \   /   \
-     * 4   6   5
-     * / \
-     * 8 7
+     * ----------1--------
+     * ---------/-\-------
+     * --------/---\------
+     * -------/-----\-----
+     * ------/-------\----
+     * ------2-------3----
+     * -----/-\-----/-----
+     * ----/---\---/------
+     * ----4---5---6------
+     * -------/-\---------
+     * -------7-8---------
      *
      * @param tree the tree to print out
      */
@@ -268,7 +277,7 @@ class Printer {
         int spacesBetween = (int) Math.pow(2, distanceFromFloor + 1) - 1; //number of spaces between each node
 
         //prints spaces before printing the data value for a node at the given point
-        int offsetToRight = 1;
+        int offsetToRight = 3;
         printWhitespaces(startSpaces + offsetToRight);
 
         //holds the list of nodes that are supposed to be expanded for the next level
