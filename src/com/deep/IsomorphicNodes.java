@@ -144,6 +144,7 @@ class IsomorphicNodes {
         runAlgorithmForNodes("2) Comparing tree1 & tree3...\n\t", tree1, tree3);
         runAlgorithmForNodes("3) Comparing tree2 & tree3...\n\t", tree2, tree3);
         runAlgorithmForNodes("4) Comparing tree4 & tree1...\n\t", tree4, tree1);
+        runAlgorithmForNodes("5) Comparing tree4 & tree2...\n\t", tree4, tree2);
     }
 
     /**
