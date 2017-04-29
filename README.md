@@ -15,11 +15,10 @@ There are a few different classes in this program that might be worth looking at
 You run the program, now what? The console should look something like the snippet below with minor differences in the times. 
 The driver class [IsomorphicNodes](#IsomorphicNodes) creates and prints out 4 different nodes, the first, second and fourth nodes are isomorphic. Then the nodes are printed out with the [Printer](#Printer) class. All time measurements are made using `System.nanoTime();` for precision.
 
-
 #### Hypothesis
-- I hypothesize that the recursive algorithm would be slower than the iterative implementation.
+- Before I began timing the code, I hypothesized that the recursive algorithm would be slower than the iterative implementation.
 
-Before we run the tests, in many computer science classes it's taught that Recursion is a guarenteed but last result to find the solution. In other words, you should only use recursion as a last resort. Iteration is usually the first way to go. Use loops for everything they said.
+Before we run the tests, in many computer science classes it's taught that you should only use recursion as a last resort. Iteration is usually the first way to go. Use loops for everything they said.
 
 ## Experiment
 Run the program and behold the magic...
@@ -142,7 +141,6 @@ Took 1566381 ns to print
 ```
 
 ### Analyzing the data
-
 Test results
 1. The iterative method was faster by 518502 ns
 2. The recursive method was faster.
@@ -150,17 +148,40 @@ Test results
 4. The recursive method was faster.
 5. The recursive method was faster.
 
-How???
+### How???
+Well, let's look at why I was wrong...
 
-Well let's look at why I was wrong...
+#### The pseudocode for iterative method
+1. Make two stacks for the opened nodes
+2. Push the first tree into the first stack then the second tree into the second stack
+3. Create 2 temporary node variables to store the value of nodes that are popped from the stack
+4. While the first stack and the second stack have nodes
+   1. Pop a node from the first stack and set it to the first tmp node variable
+   2. Pop a node from the second stack and set it to the second tmp node variable
+   3. If the two nodes are NULL check the other nodes so continue the while loop
+   4. If exactly one of the nodes is NULL then return false, there's no hope for these trees
+   5. If the data from the two nodes isn't equal return false
+   6. If the nodes are Symmetric
+       - Put the child nodes of the first and second node into the stack in symmetric order
+   7. If the nodes are Flipped
+       - Put the child nodes of the first and second node into the stack in flipped order
+5. If you get this far, that means that the two nodes are isomorphic return true and finish
 
+#### The pseudocode of the recursive method
+1. If both roots are null then return true
+2. If one of the roots is null then return false
+3. If the data from the two nodes isn't equal then return false
+4. Return the value of a recursive check to see if the child nodes are flipped or symmetric values
+
+Obviously, there are more steps involved with the iterative method so this adds more time to the code. 
+The recursive method has 4 simple steps, less code and so it went straight to the point.
 
 ## Implementation of the algorithm
 ### Recursive
 This is the code that runs when the recursive method is called to check for isomorphic nodes
-``` java
+```Java
     /**
-     * recursively checks if the 2 nodes are isomorphic
+     * recursively checks if the 2 nodes are isomorphic recursively
      *
      * @param first  the first node/tree to compare
      * @param second the second node/tree to compare
@@ -187,7 +208,7 @@ This is the code that runs when the recursive method is called to check for isom
 ### Iterative
 This is the code that runs when the iterative method is called to check for isomorphic nodes
 Because the method couldn't be called within itself, I used stacks to pop nodes and iterate through.
-``` java
+```Java
     /**
      * iteratively checks if the two nodes are isomorphic
      */
