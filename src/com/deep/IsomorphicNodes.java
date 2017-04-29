@@ -27,21 +27,6 @@ class Node {
  * implementation of the algorithm in recursive and iterative methods
  */
 class Isomorphic {
-    private static boolean nodesEqual(Node first, Node second) {
-        // if Both trees are NULL, trees isomorphic by definition
-        if ((first == null) && (second == null)) {
-            return true;
-        } else {
-            // Exactly one of the first and second is NULL, trees not equal nor are they isomorphic
-            if ((first == null) || (second == null)) {
-                return false;
-            } else {
-                //if the two are equal trees might be isomorphic
-                return first.data == second.data;
-            }
-        }
-    }
-
     /**
      * recursively checks if the 2 nodes are isomorphic
      *
@@ -118,6 +103,21 @@ class Isomorphic {
         }
 
         return true;
+    }
+
+    private static boolean nodesEqual(Node first, Node second) {
+        // if Both trees are NULL, trees isomorphic by definition
+        if ((first == null) && (second == null)) {
+            return true;
+        } else {
+            // Exactly one of the first and second is NULL, trees not equal nor are they isomorphic
+            if ((first == null) || (second == null)) {
+                return false;
+            } else {
+                //if the two are equal trees might be isomorphic
+                return first.data == second.data;
+            }
+        }
     }
 }
 
