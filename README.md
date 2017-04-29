@@ -25,6 +25,7 @@ Before we run the tests, in many computer science classes it's taught that Recur
 
 ## Experiment
 Run the program and behold the magic...
+
 ```
 1) Printing tree1
           1        
