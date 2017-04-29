@@ -140,10 +140,10 @@ class IsomorphicNodes {
         System.out.println("\n");
 
         System.out.println("========================== Isomorphic Test ==========================\n");
-        runAlgorithmForNodes("1) Checking if tree1 and tree2 are Isomorphic... \n\t", tree1, tree2);
-        runAlgorithmForNodes("2) Checking if tree1 and tree3 are Isomorphic... \n\t", tree1, tree3);
-        runAlgorithmForNodes("3) Checking if tree2 and tree3 are Isomorphic... \n\t", tree2, tree3);
-        runAlgorithmForNodes("4) Checking if tree4 and tree1 are Isomorphic... \n\t", tree4, tree1);
+        runAlgorithmForNodes("1) Comparing tree1 & tree2...\n\t", tree1, tree2);
+        runAlgorithmForNodes("2) Comparing tree1 & tree3...\n\t", tree1, tree3);
+        runAlgorithmForNodes("3) Comparing tree2 & tree3...\n\t", tree2, tree3);
+        runAlgorithmForNodes("4) Comparing tree4 & tree1...\n\t", tree4, tree1);
     }
 
     /**
@@ -154,7 +154,7 @@ class IsomorphicNodes {
         long start = System.nanoTime();
         Printer.printTree(tree);
         long end = System.nanoTime();
-        System.out.printf("\tTook %s ns to print", end - start);
+        System.out.printf("Took %s ns to print", end - start);
         System.out.println("\n");
     }
 
@@ -166,16 +166,51 @@ class IsomorphicNodes {
         System.out.printf(titleOfTest);
 
         //run the first algorithm
-        long start = System.nanoTime();
-        boolean isIsomorphic = Isomorphic.recursive(tree1, tree2);
-        long end = System.nanoTime();
-        System.out.printf("recursive method - " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns\n\t", end - start);
+        long start1 = System.nanoTime();
+        boolean isIsomorphic1 = Isomorphic.recursive(tree1, tree2);
+        long end1 = System.nanoTime();
+        long recursiveTime = end1 - start1;
+        System.out.printf("Recursive result %s isomorphic\n\t", isIsomorphic1 ? "IS" : "IS NOT");
 
         //run the iterative implementation
-        start = System.nanoTime();
-        isIsomorphic = Isomorphic.iterative(tree1, tree2);
-        end = System.nanoTime();
-        System.out.printf("iterative method - " + (isIsomorphic ? "Is" : "Not") + " Isomorphic, it took %s ns\n\n", end - start);
+        long start2 = System.nanoTime();
+        boolean isIsomorphic2 = Isomorphic.iterative(tree1, tree2);
+        long end2 = System.nanoTime();
+        long iterativeTime = end2 - start2;
+        System.out.printf("Iterative result %s isomorphic\n", isIsomorphic2 ? "IS" : "IS NOT");
+
+        System.out.println("\t+----------------+----------------+");
+        System.out.printf("\t|     %s     |     %s     |\n", recursiveTime < iterativeTime ? "winner" : "      ", iterativeTime < recursiveTime ? "winner" : "      ");
+        System.out.println("\t+----------------+----------------+");
+        System.out.println("\t| recursive time | iterative time |");
+        System.out.println("\t|----------------|----------------|");
+
+        int size = 16;
+        int spaces1 = size - (getNumberOfInts(recursiveTime) + 3);
+        int left1 = (int) Math.ceil(((double) spaces1) / (2d));
+        int right1 = (int) Math.floor(((double) spaces1) / (2d));
+
+        int spaces2 = size - (getNumberOfInts(iterativeTime) + 3);
+        int left2 = (int) Math.ceil(((double) spaces2) / (2d));
+        int right2 = (int) Math.floor(((double) spaces2) / (2d));
+
+        System.out.printf("\t|%s%s ns%s|%s%s ns%s|\n",
+                makeSpaces(left1), recursiveTime, makeSpaces(right1),
+                makeSpaces(left2), iterativeTime, makeSpaces(right2));
+        System.out.println("\t+----------------+----------------+\n");
+
+    }
+
+    private static int getNumberOfInts(long number) {
+        return Long.toString(number).length();
+    }
+
+    private static String makeSpaces(int count) {
+        String string = "";
+        for (int i = 0; i < count; i++) {
+            string += " ";
+        }
+        return string;
     }
 
     //creates the first tree
