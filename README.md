@@ -12,7 +12,7 @@ There are a few different classes in this program that might be worth looking at
 
 
 ### Running the program
-You run the program, now what? The console should look something like the snippet below with minor differences in the times. 
+You run the program, now what? The console should look something like the [snippet](#experiment) below with minor differences in the times. 
 The driver class [IsomorphicNodes](#IsomorphicNodes) creates and prints out 4 different nodes, the first, second and fourth nodes are isomorphic. Then the nodes are printed out with the [Printer](#Printer) class. All time measurements are made using `System.nanoTime();` for precision.
 
 #### Hypothesis
