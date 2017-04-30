@@ -1,4 +1,4 @@
-**Isomorphic nodes** - Two trees are called isomorphic if one of them can be obtained from other by a series of flips, i.e. by swapping left and right children of a number of nodes
+**Isomorphic nodes** - Two trees where one of the trees can be obtained from the other by a series of flips, i.e. by swapping left and right children of a number of nodes
 ------
 
 ## Overview
